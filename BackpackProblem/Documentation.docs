@@ -42,15 +42,10 @@ Odpowiedzi:
 
     Pyt. 2: Jak dużą instancję problemu (liczba przedmiotów) da się rozwiązać w około minutę metodą przeglądu wyczerpującego? Ile czasu zajmie rozwiązanie tego problemu metodą zachłanną (używając heurystyki)? Odpowiednio długie wektory m i p należy wylosować, M = np.sum(m)/2.
     Odp.: Przy wykorzystaniu metody przegladu wyczerpujacego da sie rozwiazac w okolo minute instancje problemu o wielkosci 23 przedmiotow.
-          Rozwiazanie tego problemu metoda zachlanna zajmie srednio ( t ) sekund.
+          Rozwiazanie tego problemu metoda zachlanna dla instancji 23 przedmiotow zajmie srednio 0.0008 sekundy.
 
     Pyt. 3: Jak bardzo wydłuży obliczenia dodanie jeszcze jednego przedmiotu?
     Odp.: Dodanie jeszcze jednego przedmiotu wydluzy obliczenia srednio o ( t ) sekund.
-
-    Pyt. 4: Jakie wnioski można wyciągnąć na podstawie wyników tego ćwiczenia?
-    Odp.: Uzycie przegladu wyczerpujacego dla odpowiednio malego zbioru moze byc szybsze niz uzycie algorytmu zachlannego.
-          Jednakze, mimo ze przeglad wyczerpujacy zawsze zwraca rozwiazanie optymalne, to algorytm zachlanny przy duzej instancji problemu jest szybszy.
-          W najgorszym przypadku algorytm zachlanny zwraca rozwiazanie suboptymalne i nie mamy gwarancji, ze rozwiazanie bedzie optymalne.
 
  BRUTE:
 
@@ -71,3 +66,8 @@ Odpowiedzi:
 3     mu=20  0.000746  0.000756  0.000006  0.000770
 4     mu=23  0.000752  0.000829  0.000115  0.001175
 5     mu=24  0.000752  0.000762  0.000008  0.000781
+
+    Pyt. 4: Jakie wnioski można wyciągnąć na podstawie wyników tego ćwiczenia?
+    Odp.: Uzycie przegladu wyczerpujacego jest wolniejsze niz uzycie algorytmu zachlannego.
+          Jednakze, przeglad wyczerpujacy zawsze zwraca rozwiazanie optymalne. Algorytm zachlanny jest natomiast o wiele szybszy, ale
+          w najgorszym przypadku zwraca on rozwiazanie suboptymalne i nie mamy gwarancji, ze rozwiazanie bedzie optymalne.
