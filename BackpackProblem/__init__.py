@@ -5,6 +5,8 @@ import DatasetGenerator.DatasetGenerator as DatasetGenerator
 import BruteForceSearch.BruteForceSearch as BruteForceSearch
 import GreedySearch.GreedySearch as GreedySearch
 
+# Author: Mateusz Kolacz, 336360
+
 # Part 0: DATA PREPARATION STAGE
 m = np.array([8, 3, 5, 2]) # items weight
 M = np.sum(m)/2 # let the max backpack capacity be equal to half of the all items weight

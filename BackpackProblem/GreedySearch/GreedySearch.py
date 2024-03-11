@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-
+# Author: Mateusz Kolacz, 336360
 class GreedySearch:
 
     @staticmethod
