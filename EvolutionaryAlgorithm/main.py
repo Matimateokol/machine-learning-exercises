@@ -1,7 +1,7 @@
 # Author: Mateusz Kolacz, 336360
-import cec2017
 from cec2017.functions import f2, f13
 import numpy as np
+import pandas as pd
 
 
 class EvolutionaryAlgorithm:
@@ -10,7 +10,7 @@ class EvolutionaryAlgorithm:
     PARAMS_SIZE = 10
 
     Q_x = f2  # goal_function, function which we are going to optimize
-    budget = 10000 # total budget
+    budget = 10000  # total budget
     population_size = 50  # mu value
     sigma = 3  # param needed for mutation
     t = 0  # current generation (iteration) counter
@@ -73,25 +73,104 @@ class EvolutionaryAlgorithm:
         best_individual_score = final_scores[best_index]
         return best_individual, best_individual_score
 
-
-def main():
-
-    population_sizes = [2, 4, 8, 16, 32, 64, 128]
-
-    ### Test 1 ###
-    ea1 = EvolutionaryAlgorithm(10_000, 50, 3, f2)
+def test_population_evolutionary_algorithm(exp_id, population, sigma, function_to_optimize, budget):
+    ea1 = EvolutionaryAlgorithm(budget, population, sigma, function_to_optimize)
     results = []
     for _ in range(30):
         results.append(ea1.run_evolutionary_algorithm()[1])
 
-    min_val = round(np.min(results), 2)
-    max_val = round(np.max(results), 2)
-    mean_val = round(np.mean(results), 2)
-    std_val = round(np.std(results), 2)
+    # Calculate stats
+    min_val = np.min(results)
+    mean_val = np.mean(results)
+    std_val = np.std(results)
+    max_val = np.max(results)
 
-    print("Population size: ", ea1.population_size, ", Sigma: ", ea1.sigma)
-    print("Minimum:", min_val, ", Maximum:", max_val, ", Mean:", mean_val, "Standard Deviation:", std_val)
+    return {
+        'Maks. iteracji': int(ea1.tmax),
+        'Rozmiar_populacji': "mu=" + str(population),
+        'Sigma': sigma,
+        'Minimum': min_val,
+        'Srednia': mean_val,
+        'Od. Stand.': std_val,
+        'Maksimum': max_val
+    }
 
+
+def main():
+    print("\n=============================================================\n")
+    pd.options.display.float_format = '{:.2f}'.format
+    population_sizes = [2, 4, 8, 16, 32, 64, 128]
+    sigmas = [0.1, 1, 3, 5, 10, 50, 100]
+
+    ### Population Test suite 1: f2 function ###
+    exp_id = "1.1"
+    df11 = pd.DataFrame(
+        columns=['Maks. iteracji', 'Rozmiar_populacji', 'Sigma', 'Minimum', 'Srednia', 'Od. Stand.', 'Maksimum']
+    )
+    print("Eksperyment", exp_id, ": badanie wplywu rozmiaru populacji dla funkcji", f2.__name__)
+    for ps in population_sizes:
+        df11 = df11._append(test_population_evolutionary_algorithm("1.1", ps, 3, f2, 10_000), ignore_index=True)
+
+    print(df11.to_markdown())
+    print("\n=============================================================\n")
+
+    ### Population Test suite 2: f13 function ###
+    exp_id = "1.2"
+    df12 = pd.DataFrame(
+        columns=['Maks. iteracji', 'Rozmiar_populacji', 'Sigma', 'Minimum', 'Srednia', 'Od. Stand.', 'Maksimum']
+    )
+    print("Eksperyment", exp_id, ": badanie wplywu rozmiaru populacji dla funkcji", f13.__name__)
+    for ps in population_sizes:
+        df12 = df12._append(test_population_evolutionary_algorithm("1.2", ps, 3, f13, 10_000), ignore_index=True)
+
+    print(df12.to_markdown())
+    print("\n=============================================================\n")
+
+    ## Mutation Test suite 3: f2 function ###
+    exp_id = "2.1"
+    df21 = pd.DataFrame(
+        columns=['Maks. iteracji', 'Rozmiar_populacji', 'Sigma', 'Minimum', 'Srednia', 'Od. Stand.', 'Maksimum']
+    )
+    print("Eksperyment", exp_id, ": badanie wplywu mutacji dla funkcji", f2.__name__)
+    for sigma in sigmas:
+        df21 = df21._append(test_population_evolutionary_algorithm("2.1", 32, sigma, f2, 10_000), ignore_index=True)
+
+    print(df21.to_markdown())
+    print("\n=============================================================\n")
+
+    ### Mutation Test suite 4: f13 function ###
+    exp_id = "2.2"
+    df22 = pd.DataFrame(
+        columns=['Maks. iteracji', 'Rozmiar_populacji', 'Sigma', 'Minimum', 'Srednia', 'Od. Stand.', 'Maksimum']
+    )
+    print("Eksperyment", exp_id, ": badanie wplywu mutacji dla funkcji", f13.__name__)
+    for sigma in sigmas:
+        df22 = df22._append(test_population_evolutionary_algorithm("2.2", 64, sigma, f13, 10_000), ignore_index=True)
+
+    print(df22.to_markdown())
+    print("\n=============================================================\n")
+
+    ### Mutation Test suite 5: f2 function ###
+    exp_id = "3.1"
+    df31 = pd.DataFrame(
+        columns=['Maks. iteracji', 'Rozmiar_populacji', 'Sigma', 'Minimum', 'Srednia', 'Od. Stand.', 'Maksimum']
+    )
+    print("Eksperyment", exp_id, ": badanie wplywu 5x budzet dla funkcji", f2.__name__)
+    df31 = df31._append(test_population_evolutionary_algorithm("3.1", 32, 1, f2, 50_000), ignore_index=True)
+
+    print(df31.to_markdown())
+    print("\n=============================================================\n")
+
+    ### Mutation Test suite 6: f13 function ###
+    exp_id = "3.2"
+    df32 = pd.DataFrame(
+        columns=['Maks. iteracji', 'Rozmiar_populacji', 'Sigma', 'Minimum', 'Srednia', 'Od. Stand.', 'Maksimum']
+    )
+    print("Eksperyment", exp_id, ": badanie wplywu 5x budzet dla funkcji", f13.__name__)
+    df32 = df32._append(test_population_evolutionary_algorithm("3.2", 64, 3, f13, 50_000), ignore_index=True)
+
+    print(df32.to_markdown())
+    print("\n=============================================================\n")
 
 if __name__ == '__main__':
     main()
