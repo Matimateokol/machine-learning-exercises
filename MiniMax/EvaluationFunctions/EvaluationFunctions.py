@@ -273,10 +273,10 @@ def push_forward_ev_func(board, is_black_turn):
                 if field.is_king():
                     h += KING_VALUE
                 else:
-                    h += 5 + field.row  # ToDO check if correct
+                    h += 5 + field.row
             elif field.is_white():
                 if field.is_king():
                     h -= KING_VALUE
                 else:
-                    h -= 5 + (BOARD_WIDTH - (field.row - 1))  # ToDO check if correct
+                    h -= 5 + (BOARD_WIDTH - (field.row - 1))
     return h

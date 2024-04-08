@@ -77,7 +77,7 @@ def minimax_a_b(board, depth, plays_as_black, ev_func):
     for possible_move in possible_moves:
         # NEW: minimax_a_b function implemented by Mateusz Kolacz:
         board_copy = deepcopy(board)
-        board_copy.make_move(possible_move) # ToDo Not sure if correct... Check it out once again
+        board_copy.make_move(possible_move)
         moves_marks.append(minimax_a_b_recurr(
             board_copy,
             depth-1,
@@ -506,10 +506,10 @@ def main():
         clock.tick(FPS)
             
         if not game.board.white_turn:
-            # move = minimax_a_b( game.board, MINIMAX_DEPTH, True, basic_ev_func)
-            #move = minimax_a_b( game.board, MINIMAX_DEPTH, True, push_forward_ev_func)
+            move = minimax_a_b( game.board, MINIMAX_DEPTH, True, basic_ev_func)
+            # move = minimax_a_b( game.board, MINIMAX_DEPTH, True, push_forward_ev_func)
             # move = minimax_a_b( game.board, MINIMAX_DEPTH, True, push_to_opp_half_ev_func)
-            move = minimax_a_b( game.board, MINIMAX_DEPTH, True, group_prize_ev_func)
+            # move = minimax_a_b( game.board, MINIMAX_DEPTH, True, group_prize_ev_func)
             
             
             
@@ -533,16 +533,18 @@ def main():
 
     pygame.quit()
 
-
-def ai_vs_ai():
+# NEW changed the function definition
+def ai_vs_ai(black_depth: int, white_depth: int, eval_function):
     board = Board()
     is_running = True
  
     while is_running:
         if board.white_turn:
-            move = minimax_a_b( board, 5, not board.white_turn, basic_ev_func)
+            # move = minimax_a_b( board, 5, not board.white_turn, basic_ev_func)
+            move = minimax_a_b( board, white_depth, not board.white_turn, eval_function) # NEW
         else:
-            move = minimax_a_b( board, 5, not board.white_turn, basic_ev_func)
+            move = minimax_a_b(board, black_depth, not board.white_turn, eval_function)
+            # move = minimax_a_b( board, 5, not board.white_turn, basic_ev_func)
             # move = minimax_a_b( board, 5, not board.white_turn, push_forward_ev_func)
             # move = minimax_a_b( board, 5, not board.white_turn, push_to_opp_half_ev_func)
             # move = minimax_a_b( board, 5, not board.white_turn, group_prize_ev_func)
@@ -561,9 +563,19 @@ def ai_vs_ai():
     print("black_won:", board.black_won )
     print("white_won:", board.white_won )
     #if both won then it is a draw!
-    
+    if board.black_won:
+        return 1
+    elif board.white_won:
+        return -1
+    else:
+        return 0
+
 
 main()
-#ai_vs_ai()
+# ai_vs_ai(5, 5, basic_ev_func)
+# ai_vs_ai(5, 5, push_forward_ev_func)
+# ai_vs_ai(5, 5, push_to_opp_half_ev_func)
+# ai_vs_ai(5, 5, group_prize_ev_func)
+
     
 
