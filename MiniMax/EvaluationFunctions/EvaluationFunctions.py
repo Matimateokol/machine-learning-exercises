@@ -73,13 +73,14 @@ def group_prize_ev_func(board, is_black_turn):
             vicinity[row + 1][col + 1]
         ]
     """
-    FIRST_ROW, FIRST_COL = 0
-    LAST_ROW, LAST_COL = 7
+    FIRST_ROW, FIRST_COL = 0, 0
+    LAST_ROW, LAST_COL = 7, 7
+    board_field = board.board
 
     for row in range(BOARD_HEIGHT):
         for col in range(BOARD_WIDTH):
-            if board[row][col].is_black():
-                if board[row][col].is_king():
+            if board_field[row][col].is_black():
+                if board_field[row][col].is_king():
                     h += KING_VALUE
                 else:
                     h += PAWN_VALUE
@@ -91,68 +92,69 @@ def group_prize_ev_func(board, is_black_turn):
                 # MAX one neighbor cases:
                 # Top left corner case
                 if row == FIRST_ROW and col == FIRST_COL:
-                    if board[row + 1][col + 1].is_black():
+                    if board_field[row + 1][col + 1].is_black():
                         h += 1
                         continue
                 # Top right corner case
                 if row == FIRST_ROW and col == LAST_COL:
-                    if board[row - 1][col - 1].is_black():
+                    if board_field[row + 1][col - 1].is_black():
                         h += 1
                         continue
                 # Bottom left corner case
                 if row == LAST_ROW and col == FIRST_COL:
-                    if board[row + 1][col + 1].is_black():
+                    if board_field[row - 1][col + 1].is_black():
                         h += 1
                         continue
                 # Bottom right corner case
                 if row == LAST_ROW and col == LAST_COL:
-                    if board[row + 1][col - 1].is_black():
+                    if board_field[row - 1][col - 1].is_black():
                         h += 1
                         continue
 
                 # MAX two neighbors cases:
                 # Top edge:
-                if row == FIRST_ROW:
-                    if board[row - 1][col - 1].is_black():
+                if row == FIRST_ROW and (not col == FIRST_COL and not col == LAST_COL):
+                    if board_field[row + 1][col - 1].is_black():
                         h += 1
-                    if board[row - 1][col + 1].is_black():
+                    if board_field[row + 1][col + 1].is_black():
                         h += 1
                     continue
                 # Left edge:
-                if col == FIRST_COL:
-                    if board[row - 1][col + 1].is_black():
+                if col == FIRST_COL and (not row == FIRST_ROW and not row == LAST_ROW):
+                    if board_field[row - 1][col + 1].is_black():
                         h += 1
-                    if board[row + 1][col + 1].is_black():
+                    if board_field[row + 1][col + 1].is_black():
                         h += 1
                     continue
                 # Right edge:
-                if col == LAST_COL:
-                    if board[row + 1][col - 1].is_black():
+                if col == LAST_COL and (not row == FIRST_ROW and not row == LAST_ROW):
+                    if board_field[row + 1][col - 1].is_black():
                         h += 1
-                    if board[row - 1][col - 1].is_black():
+                    if board_field[row - 1][col - 1].is_black():
                         h += 1
                     continue
                 # Bottom edge:
-                if row == LAST_ROW:
-                    if board[row - 1][col - 1].is_black():
+                if row == LAST_ROW and (not col == FIRST_COL and not col == LAST_COL):
+                    if board_field[row - 1][col - 1].is_black():
                         h += 1
-                    if board[row - 1][col + 1].is_black():
+                    if board_field[row - 1][col + 1].is_black():
                         h += 1
                     continue
 
                 # MAX four neighbors cases:
-                if board[row - 1][col - 1].is_black():
-                    h += 1
-                if board[row - 1][col + 1].is_black():
-                    h += 1
-                if board[row + 1][col - 1].is_black():
-                    h += 1
-                if board[row + 1][col + 1].is_black():
-                    h += 1
-                continue
+                if not col == FIRST_COL and not col == LAST_COL:
+                    if board_field[row - 1][col - 1].is_black():
+                        h += 1
+                    if board_field[row - 1][col + 1].is_black():
+                        h += 1
+                    if board_field[row + 1][col - 1].is_black():
+                        h += 1
+                    if board_field[row + 1][col + 1].is_black():
+                        h += 1
+                    continue
 
-            elif board[row][col].is_white():
-                if board[row][col].is_king():
+            elif board_field[row][col].is_white():
+                if board_field[row][col].is_king():
                     h -= KING_VALUE
                 else:
                     h -= PAWN_VALUE
@@ -164,65 +166,66 @@ def group_prize_ev_func(board, is_black_turn):
                 # MAX one neighbor cases:
                 # Top left corner case
                 if row == FIRST_ROW and col == FIRST_COL:
-                    if board[row + 1][col + 1].is_white():
+                    if board_field[row + 1][col + 1].is_white():
                         h -= 1
                         continue
                 # Top right corner case
                 if row == FIRST_ROW and col == LAST_COL:
-                    if board[row - 1][col - 1].is_white():
+                    if board_field[row + 1][col - 1].is_white():
                         h -= 1
                         continue
                 # Bottom left corner case
                 if row == LAST_ROW and col == FIRST_COL:
-                    if board[row + 1][col + 1].is_white():
+                    if board_field[row - 1][col + 1].is_white():
                         h -= 1
                         continue
                 # Bottom right corner case
                 if row == LAST_ROW and col == LAST_COL:
-                    if board[row + 1][col - 1].is_white():
+                    if board_field[row - 1][col - 1].is_white():
                         h -= 1
                         continue
 
                 # MAX two neighbors cases:
                 # Top edge:
-                if row == FIRST_ROW:
-                    if board[row - 1][col - 1].is_white():
+                if row == FIRST_ROW and (not col == FIRST_COL and not col == LAST_COL):
+                    if board_field[row - 1][col - 1].is_white():
                         h -= 1
-                    if board[row - 1][col + 1].is_white():
+                    if board_field[row - 1][col + 1].is_white():
                         h -= 1
                     continue
                 # Left edge:
-                if col == FIRST_COL:
-                    if board[row - 1][col + 1].is_white():
+                if col == FIRST_COL and (not row == FIRST_ROW and not row == LAST_ROW):
+                    if board_field[row - 1][col + 1].is_white():
                         h -= 1
-                    if board[row + 1][col + 1].is_white():
+                    if board_field[row + 1][col + 1].is_white():
                         h -= 1
                     continue
                 # Right edge:
-                if col == LAST_COL:
-                    if board[row + 1][col - 1].is_white():
+                if col == LAST_COL and (not row == FIRST_ROW and not row == LAST_ROW):
+                    if board_field[row + 1][col - 1].is_white():
                         h -= 1
-                    if board[row - 1][col - 1].is_white():
+                    if board_field[row - 1][col - 1].is_white():
                         h -= 1
                     continue
                 # Bottom edge:
-                if row == LAST_ROW:
-                    if board[row - 1][col - 1].is_white():
+                if row == LAST_ROW and (not col == FIRST_COL and not col == LAST_COL):
+                    if board_field[row - 1][col - 1].is_white():
                         h -= 1
-                    if board[row - 1][col + 1].is_white():
+                    if board_field[row - 1][col + 1].is_white():
                         h -= 1
                     continue
 
                 # MAX four neighbors cases:
-                if board[row - 1][col - 1].is_white():
-                    h -= 1
-                if board[row - 1][col + 1].is_white():
-                    h -= 1
-                if board[row + 1][col - 1].is_white():
-                    h -= 1
-                if board[row + 1][col + 1].is_white():
-                    h -= 1
-                continue
+                if not col == FIRST_COL and not col == LAST_COL:
+                    if board_field[row - 1][col - 1].is_white():
+                        h -= 1
+                    if board_field[row - 1][col + 1].is_white():
+                        h -= 1
+                    if board_field[row + 1][col - 1].is_white():
+                        h -= 1
+                    if board_field[row + 1][col + 1].is_white():
+                        h -= 1
+                    continue
 
     return h
 

@@ -506,10 +506,10 @@ def main():
         clock.tick(FPS)
             
         if not game.board.white_turn:
-            move = minimax_a_b( game.board, MINIMAX_DEPTH, True, basic_ev_func)
+            # move = minimax_a_b( game.board, MINIMAX_DEPTH, True, basic_ev_func)
             #move = minimax_a_b( game.board, MINIMAX_DEPTH, True, push_forward_ev_func)
-            #move = minimax_a_b( game.board, MINIMAX_DEPTH, True, push_to_opp_half_ev_func)
-            #move = minimax_a_b( game.board, MINIMAX_DEPTH, True, group_prize_ev_func)
+            # move = minimax_a_b( game.board, MINIMAX_DEPTH, True, push_to_opp_half_ev_func)
+            move = minimax_a_b( game.board, MINIMAX_DEPTH, True, group_prize_ev_func)
             
             
             
