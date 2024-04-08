@@ -16,67 +16,51 @@ Chętni mogą ulepszać mój kod (trzeba oznaczyć komentarzem co zostało zmien
 """
 
 import numpy as np
-import pygame
-from copy import deepcopy
+import pygame # NOTE: Copied to Game.py
+from copy import deepcopy # NOTE: Copied to Board.py
 
-FPS = 20
+# NEW Game components imports:
+from MiniMax.CheckersGame.Board import Board
+from MiniMax.CheckersGame.Game import Game
 
-MINIMAX_DEPTH = 5
+#from CheckersGame.GameSettings import * # NEW importing constants/settings from separate file
+from MiniMax.CheckersGame.GameSettings import *
 
-WIN_WIDTH = 800
-WIN_HEIGHT = 800
+# importing evaluation functions
+from MiniMax.EvaluationFunctions.EvaluationFunctions import basic_ev_func
 
-WON_PRIZE = 10000
+""" NEW Exported below configuration to GameSettings.py
 
-MOVES_HIST_LEN=6
-
-BOARD_WIDTH = BOARD_HEIGHT = 8
-
-FIELD_SIZE = WIN_WIDTH/BOARD_WIDTH
-PIECE_SIZE = FIELD_SIZE/2 - 8
-MARK_THICK = 2
-POS_MOVE_MARK_SIZE = PIECE_SIZE/2
-
-
-BLACK_PIECES_COL = (0,0,0)
-WHITE_PIECES_COL = (255,255,255)
-POSS_MOVE_MARK_COL = (255,0,0)
-DARK_BOARD_COL = (196, 164, 132)
-BRIGHT_BOARD_COL = (250,250,250)
-KING_MARK_COL = (255, 215, 0)
-
-            
-#count difference between the number of pieces, king+10
-def basic_ev_func(board, is_black_turn):
-    h=0
-    #ToDo funkcja liczy i zwraca ocene aktualnego stanu planszy
-
-    #self.board[row][col].is_blue() - sprawdza czy to niebieski kolor figury
-    #self.board[row][col].is_white()- sprawdza czy to biały kolor figury
-    #self.board[row][col].is_king()- sprawdza czy to damka
-    #self.board[row][col].row - wiersz na którym stoi figura
-    #self.board[row][col].col - kolumna na której stoi figura
-    #współrzędne zaczynają (0,0) się od lewej od góry
-    return h              
-
-#nagrody jak w wersji podstawowej + nagroda za stopień zwartości grupy        
-def group_prize_ev_func(board, is_black_turn):
-    h=0
-#ToDo
-    return h         
-
-#za każdy pion na własnej połowie planszy otrzymuje się 5 nagrody, na połowie przeciwnika 7, a za każdą damkę 10.
-def push_to_opp_half_ev_func(board, is_black_turn):
-    h=0
-    #ToDo
-    return h              
+# FPS = 20
+#
+# MINIMAX_DEPTH = 5
+#
+# WIN_WIDTH = 800
+# WIN_HEIGHT = 800
+#
+# WON_PRIZE = 10000
+#
+# MOVES_HIST_LEN=6
+#
+# BOARD_WIDTH = BOARD_HEIGHT = 8
+#
+# FIELD_SIZE = WIN_WIDTH/BOARD_WIDTH
+# PIECE_SIZE = FIELD_SIZE/2 - 8
+# MARK_THICK = 2
+# POS_MOVE_MARK_SIZE = PIECE_SIZE/2
+#
+#
+# BLACK_PIECES_COL = (0,0,0)
+# WHITE_PIECES_COL = (255,255,255)
+# POSS_MOVE_MARK_COL = (255,0,0)
+# DARK_BOARD_COL = (196, 164, 132)
+# BRIGHT_BOARD_COL = (250,250,250)
+# KING_MARK_COL = (255, 215, 0)
+"""
 
 
-#za każdy nasz pion otrzymuje się nagrodę w wysokości: (5 + numer wiersza, na którym stoi pion) (im jest bliżej wroga tym lepiej), a za każdą damkę dodtakowe: 10. 
-def push_forward_ev_func(board, is_black_turn):
-    h=0
-    #ToDo
-    return h              
+### NEW Evaluation functions have been exported to separate python file ###
+
 
 #f. called from main    
 def minimax_a_b(board, depth, plays_as_black, ev_func):
@@ -90,16 +74,57 @@ def minimax_a_b(board, depth, plays_as_black, ev_func):
     b = np.inf
     moves_marks = []
     for possible_move in possible_moves:
-        #ToDo  
+        # NEW: minimax_a_b function implemented by Mateusz Kolacz:
+        board_copy = deepcopy(board)
+        board_copy.make_move(possible_move) # ToDo Not sure if correct... Check it out once again
+        moves_marks.append(minimax_a_b_recurr(
+            board_copy,
+            depth-1,
+            not plays_as_black,
+            a,
+            b,
+            ev_func
+        ))
+
+    if plays_as_black:
+        best_index = moves_marks.index(max(moves_marks))
+    else:
+        best_index = moves_marks.index(min(moves_marks))
 
     return possible_moves[best_index]
 
+
 #recursive function, called from minimax_a_b
 def minimax_a_b_recurr(board, depth, move_max, a, b, ev_func):
-    #ToDo
-    return b
+    # NEW: Recursive function implemented by Mateusz Kolacz:
+    if depth == 0 or (board.black_won or board.white_won):
+        return ev_func(board, move_max)
+    U = successors(board, move_max)
 
+    if move_max:
+        for u in U:
+            a = max(a, minimax_a_b_recurr(u, depth - 1, not move_max, a, b, ev_func))
+            if a >= b:
+                return b
+        return a
+    else:
+        for u in U:
+            b = min(b, minimax_a_b_recurr(u, depth - 1, not move_max, a, b, ev_func))
+            if a >= b:
+                return a
+        return b
 
+# New: function calculating successor boards of the actual position
+def successors(board, move_max):
+    successors_boards = []
+    for move in board.get_possible_moves(move_max):
+        board_copy = deepcopy(board)
+        board_copy.make_move(move)
+        successors_boards.append(board_copy)
+    return successors_boards
+
+# NEW Exported to separate file...
+"""
 class Move:
     def __init__(self, piece, dest_row, dest_col, captures=None):
         self.piece=piece
@@ -114,7 +139,10 @@ class Move:
     
     def __str__(self):
         return "Move from r, c:"+str(self.piece.row)+", "+str(self.piece.col)+", to:"+str(self.dest_row)+", "+ str(self.dest_col)+", "+ str(id(self.piece))
+"""
 
+# NEW Exported to separate file...
+"""
 class Field:
     def is_empty(self):
         return True
@@ -126,9 +154,15 @@ class Field:
         return False
     
     def __str__(self):
-        return "."
-    
+        return "."   
 
+
+
+# NEW Exported to separate file...
+"""
+
+# NEW Exported to separate file...
+"""
 class Pawn(Field):    
     def __init__(self, is_white, row, col):
         self.__is_white=is_white
@@ -158,8 +192,10 @@ class Pawn(Field):
 
     def is_black(self):
         return not self.__is_white
-    
+"""
 
+# NEW Exported to separate file...
+"""
 class King(Pawn):    
     def __init__(self, pawn):
         super().__init__(pawn.is_white(), pawn.row, pawn.col)
@@ -178,8 +214,10 @@ class King(Pawn):
         if self.is_white():
             return "W"
         return "B"
-    
+"""
 
+# NEW Exported to separate file...
+"""
 class Board:
     def __init__(self): #row, col
         self.board = []
@@ -379,8 +417,10 @@ class Board:
             self.board[d_row][d_col] = King(self.board[d_row][d_col])
             
         self.white_turn = not self.white_turn
-        
+"""
 
+# NEW Exported to separate file...
+"""
 class Game:
     def __init__(self, window, board):
         self.window = window
@@ -452,7 +492,7 @@ class Game:
                 self.something_is_marked = True
                 self.marked_col=col
                 self.marked_row=row
-            
+"""
 
 def main():
     board = Board()
@@ -522,7 +562,7 @@ def ai_vs_ai():
     #if both won then it is a draw!
     
 
-main()
-#ai_vs_ai()
+#main()
+ai_vs_ai()
     
 
