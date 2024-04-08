@@ -27,7 +27,8 @@ from MiniMax.CheckersGame.Game import Game
 from MiniMax.CheckersGame.GameSettings import *
 
 # importing evaluation functions
-from MiniMax.EvaluationFunctions.EvaluationFunctions import basic_ev_func
+from MiniMax.EvaluationFunctions.EvaluationFunctions import basic_ev_func, push_forward_ev_func, \
+    push_to_opp_half_ev_func, group_prize_ev_func
 
 """ NEW Exported below configuration to GameSettings.py
 
@@ -542,9 +543,9 @@ def ai_vs_ai():
             move = minimax_a_b( board, 5, not board.white_turn, basic_ev_func)
         else:
             move = minimax_a_b( board, 5, not board.white_turn, basic_ev_func)
-            #move = minimax_a_b( board, 5, not board.white_turn, push_forward_ev_func)
-            #move = minimax_a_b( board, 5, not board.white_turn, push_to_opp_half_ev_func)
-            #move = minimax_a_b( board, 5, not board.white_turn, group_prize_ev_func)
+            # move = minimax_a_b( board, 5, not board.white_turn, push_forward_ev_func)
+            # move = minimax_a_b( board, 5, not board.white_turn, push_to_opp_half_ev_func)
+            # move = minimax_a_b( board, 5, not board.white_turn, group_prize_ev_func)
             
         if move is not None:
             board.register_move(move)
@@ -562,7 +563,7 @@ def ai_vs_ai():
     #if both won then it is a draw!
     
 
-#main()
-ai_vs_ai()
+main()
+#ai_vs_ai()
     
 
