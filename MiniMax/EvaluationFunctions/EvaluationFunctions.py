@@ -23,7 +23,7 @@ def basic_ev_func(board, is_black_turn):
                 else:
                     h -= PAWN_VALUE
 
-    # self.board[row][col].is_blue() - sprawdza czy to niebieski kolor figury
+    # self.board[row][col].is_black() - sprawdza czy to czarny kolor figury
     # self.board[row][col].is_white()- sprawdza czy to biały kolor figury
     # self.board[row][col].is_king()- sprawdza czy to damka
     # self.board[row][col].row - wiersz na którym stoi figura

@@ -19,7 +19,7 @@ def report_data_generator():
         for black_depth, white_depth in list(itertools.product(depths, depths)):
             print(f"Iteration ${iteration}")
             iteration += 1
-            result = ai_vs_ai(black_depth, white_depth, eval_functions[0])
+            result = ai_vs_ai(black_depth, white_depth, eval_functions[0], eval_functions[0])
             writer.writerow([
                 black_depth,
                 white_depth,
@@ -35,7 +35,7 @@ def report_data_generator():
         for black_depth, white_depth in list(itertools.product(depths, depths)):
             print(f"Iteration ${iteration}")
             iteration += 1
-            result = ai_vs_ai(black_depth, white_depth, eval_functions[1])
+            result = ai_vs_ai(black_depth, white_depth, eval_functions[1], eval_functions[1])
             writer.writerow([
                 black_depth,
                 white_depth,
@@ -51,7 +51,7 @@ def report_data_generator():
         for black_depth, white_depth in list(itertools.product(depths, depths)):
             print(f"Iteration ${iteration}")
             iteration += 1
-            result = ai_vs_ai(black_depth, white_depth, eval_functions[2])
+            result = ai_vs_ai(black_depth, white_depth, eval_functions[2], eval_functions[2])
             writer.writerow([
                 black_depth,
                 white_depth,
@@ -67,11 +67,32 @@ def report_data_generator():
         for black_depth, white_depth in list(itertools.product(depths, depths)):
             print(f"Iteration ${iteration}")
             iteration += 1
-            result = ai_vs_ai(black_depth, white_depth, eval_functions[3])
+            result = ai_vs_ai(black_depth, white_depth, eval_functions[3], eval_functions[3])
             writer.writerow([
                 black_depth,
                 white_depth,
                 "Biały" if  result == -1 else "Czarny" if result == 1 else "Remis"
             ])
 
-report_data_generator()
+def different_strategies_testing_data_generator():
+    eval_functions = [basic_ev_func, push_forward_ev_func, push_to_opp_half_ev_func, group_prize_ev_func]
+    depth = 4
+
+    print("Badanie Omega 1\n")
+    with open("test_results/eval_func_omega1_results.csv", mode="w") as file_1:
+        iteration = 0
+        writer = csv.writer(file_1)
+        writer.writerow(["Czarny funkcja oceny", "Biały funkcja oceny", "Wynik"])
+        for black_eval_func, white_eval_func in list(itertools.product(eval_functions, eval_functions)):
+            print(f"Iteration ${iteration}")
+            iteration += 1
+            result = ai_vs_ai(depth, depth, black_eval_func, white_eval_func)
+            writer.writerow([
+                black_eval_func,
+                white_eval_func,
+                "Biały" if result == -1 else "Czarny" if result == 1 else "Remis"
+            ])
+
+
+# report_data_generator()
+different_strategies_testing_data_generator()

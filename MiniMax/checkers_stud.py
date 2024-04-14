@@ -534,16 +534,16 @@ def main():
     pygame.quit()
 
 # NEW changed the function definition
-def ai_vs_ai(black_depth: int, white_depth: int, eval_function):
+def ai_vs_ai(black_depth: int, white_depth: int, black_eval_function, white_eval_function):
     board = Board()
     is_running = True
  
     while is_running:
         if board.white_turn:
             # move = minimax_a_b( board, 5, not board.white_turn, basic_ev_func)
-            move = minimax_a_b( board, white_depth, not board.white_turn, eval_function) # NEW
+            move = minimax_a_b( board, white_depth, not board.white_turn, white_eval_function) # NEW
         else:
-            move = minimax_a_b(board, black_depth, not board.white_turn, eval_function)
+            move = minimax_a_b(board, black_depth, not board.white_turn, black_eval_function)
             # move = minimax_a_b( board, 5, not board.white_turn, basic_ev_func)
             # move = minimax_a_b( board, 5, not board.white_turn, push_forward_ev_func)
             # move = minimax_a_b( board, 5, not board.white_turn, push_to_opp_half_ev_func)
@@ -571,7 +571,7 @@ def ai_vs_ai(black_depth: int, white_depth: int, eval_function):
         return 0
 
 
-main()
+# main()
 # ai_vs_ai(5, 5, basic_ev_func)
 # ai_vs_ai(5, 5, push_forward_ev_func)
 # ai_vs_ai(5, 5, push_to_opp_half_ev_func)
