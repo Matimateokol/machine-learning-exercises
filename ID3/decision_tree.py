@@ -90,7 +90,7 @@ def id3(samples: DataFrame):
 ### for DEBUG purposes ###
 def debug():
     dataset: DataFrame = pd.read_csv(f"data/breast+cancer/breast-cancer.data", header=None).sample(frac=1)
-    # dataset: DataFrame = pd.read_csv(f"data/mushroom/agaricus-lepiota.data", header=None).sample(frac=1)
+    # dataset: DataFrame = pd.read_csv(f"data/mushroom/agaricus-lepiota-reduced.data", header=None).sample(frac=1)
     training_set_size = int(len(dataset) * 0.6)
     decision_tree: Node = id3(dataset[:training_set_size])
     print(decision_tree.to_string())
