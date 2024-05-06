@@ -1,5 +1,12 @@
+"""
+Author: Mateusz Kołacz, 336360
+"""
+
 import csv
 import random
+
+import pandas as pd
+
 
 class DataLoader:
     file_name = None
@@ -14,6 +21,9 @@ class DataLoader:
             for row in content:
                 data.append(row)
             return data
+
+    def load_dataframe(self):
+        return pd.read_csv(self.file_name, header=None)
 
     def save_data(self, data):
         with open(self.file_name, 'w', newline='') as f:
