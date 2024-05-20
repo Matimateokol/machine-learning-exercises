@@ -15,8 +15,8 @@ Nie ma obowiązku używania tego kodu.
 
 import numpy as np
 
-#ToDo tu prosze podac pierwsze cyfry numerow indeksow
-p = [3, 3]
+#Pierwsze cyfry numerow indeksow
+p = [5, 0]
 
 L_BOUND = -5
 U_BOUND = 5
@@ -52,7 +52,7 @@ def d_nloss(y_out, y):
 #* Klasa od tworzenia sieci neuronowej    
 class DlNet:
 
-    #TODO: uzupełnić funkcje forward, backward, predict i train. Dodać wagi, na razie bez biasu
+    # CO ZROBIONO: uzupełniono funkcje forward, backward, predict i train. Dodano wagi, na razie bez biasu
 
     def __init__(self, x, y):
         self.x = x
@@ -60,7 +60,8 @@ class DlNet:
         self.y_out = 0
         
         self.HIDDEN_L_SIZE = 9  #liczba neuronów w warstwie ukrytej
-        self.LR = 0.03          #stała uczenia (do aktualizacji wag)
+        self.LR = 0.003        #stała uczenia (do aktualizacji wag)
+        self.QUALITY_INDICATOR = 0 #zmienna do przechowania wskaznika jakosci ostatniej aproksymacji
 
         #* Wagi z zakresu [0,1)
         self.W_in_hidden = np.random.randn(self.HIDDEN_L_SIZE, len(x)) #wagi miedzy warstwa wejsciowa a ukryta - rozmiar 9/10
@@ -123,15 +124,18 @@ class DlNet:
             self.forward(x_set)
             if i % 100 == 0:
                 E = np.sum(nloss(self.y_out, y))
+                self.QUALITY_INDICATOR = E
                 print(f'Wartość funkcji straty E, w iteracji {i}: {E}')
             self.backward(x_set, y_set)
 
-#* Inicjalizacja instacji sieci neuronowej i wytrenowanie jej (poczatkowo 15000 iteracji)        
+#* Inicjalizacja instacji sieci neuronowej i wytrenowanie jej (poczatkowo 10000 iteracji)
 nn = DlNet(x,y)
 
-losses = nn.train(x, y, 1501)
+ITERATIONS = 15_000
 
-yh = nn.predict(x) #ToDo tu umiescić wyniki (y) z sieci
+losses = nn.train(x, y, ITERATIONS + 1)
+
+yh = nn.predict(x) #WAZNE: tu umieszczono wyniki (y) z sieci
 
 import matplotlib.pyplot as plt
 
@@ -146,6 +150,7 @@ ax.xaxis.set_ticks_position('bottom')
 ax.yaxis.set_ticks_position('left')
 
 plt.plot(x,y, 'r')
-plt.plot(x,yh, 'b')
-
+plt.plot(x,yh, 'b', linestyle='dotted')
+plt.title("Liczba neuronów w warstwie ukrytej: " + str(nn.HIDDEN_L_SIZE) + ", Liczba iteracji: " + str(ITERATIONS) + ",\nWspół. uczenia: " + str(nn.LR) + ", Wskaźnik jakości aproks.: " + str("%.6f" % nn.QUALITY_INDICATOR))
+plt.legend(['Funkcja aproksymowana', 'Perceptron dwuwarstwowy'], loc='upper left')
 plt.show()
