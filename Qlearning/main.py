@@ -1,5 +1,5 @@
 """
-   Author: Mateusz Kołacz
+   Author: Mateusz Kołacz, 336360
 """
 from typing import Any
 import gymnasium as gym
@@ -59,7 +59,7 @@ def run_base_qlearning():
 
 
    # STEP 2 DOING THE ALGORITHM
-   num_of_ind_runs = 10
+   num_of_ind_runs = 25
    num_episodes = 1000
    averaged_reward = np.zeros(num_episodes)
 
@@ -122,7 +122,7 @@ def run_custom_qlearning():
    action_size = env.action_space.n
 
    # STEP 2 DOING THE ALGORITHM
-   num_of_ind_runs = 10
+   num_of_ind_runs = 25
    num_episodes = 1000
    averaged_reward = np.zeros(num_episodes)
 
@@ -183,7 +183,7 @@ import matplotlib.pyplot as plt
 
 fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
-# ax.set_ylim(0, 1)
+ax.set_ylim(0, 1)
 ax.spines['left'].set_position('center')
 ax.spines['bottom'].set_position('zero')
 ax.spines['right'].set_color('none')
