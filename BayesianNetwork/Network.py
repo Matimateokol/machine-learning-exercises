@@ -1,11 +1,19 @@
+"""
+Author: Mateusz Kołacz, 336360
+"""
 import numpy as np
 
-
+"""
+    Class that is a template for Naive Bayesian Network
+"""
 class Network:
 
     def __init__(self, nodes):
         self.nodes = nodes
 
+    """
+        Method for generating data samples
+    """
     def sample(self, quantity):
         result = []
         used = []
