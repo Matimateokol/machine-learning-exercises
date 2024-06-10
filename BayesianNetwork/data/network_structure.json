@@ -1,0 +1,34 @@
+[
+    {
+        "name": "Chair",
+        "parents": [],
+        "probabilities": {
+            "": 0.8
+        }
+    },
+    {
+        "name": "Sport",
+        "parents": [],
+        "probabilities": {
+            "": 0.02
+        }
+    },
+    {
+        "name": "Back",
+        "parents": ["Chair", "Sport"],
+        "probabilities": {
+            "TT": 0.9,
+            "TF": 0.2,
+            "FT": 0.9,
+            "FF": 0.01
+        }
+    },
+    {
+        "name": "Ache",
+        "parents": ["Back"],
+        "probabilities": {
+            "T": 0.7,
+            "F": 0.1
+        }
+    }
+]
